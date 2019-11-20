@@ -189,7 +189,7 @@ SELECT COUNT(ce.emp_no), de.dept_no
 FROM current_emp as ce
 LEFT JOIN dept_emp as de
 ON ce.emp_no = de.emp_no
-GROUP BY de.dept_no;
+GROUP BY de.dept_no
 ORDER BY de.dept_no;
 
 SELECT * FROM salaries;
@@ -250,7 +250,7 @@ FROM dept_manager AS dm
 SELECT ce.emp_no,
 ce.first_name,
 ce.last_name,
-d.dept_name	
+d.dept_name;
 
 -- INTO dept_info
 FROM current_emp as ce
@@ -263,8 +263,6 @@ ON (de.dept_no = d.dept_no);
 
 --Challenge
 
------------------------------------------------------------------
---QUERY 1
 --create table of number of titles retiring
 select 	t.emp_no,
 		ri.first_name,
@@ -278,22 +276,18 @@ from titles as t
 right join retirement_info as ri on ri.emp_no = t.emp_no
 left join salaries as s on s.emp_no = ri.emp_no
 
------------------------------------------------------------------
---QUERY 2
 --list of retiring employees with same title
-select num_t_ri.title,
-	   count(num_t_ri.emp_no)
+select last_from_date.title,
+	   count(last_from_date.emp_no)
 into retiring_employees_with_same_title
 from
 	(select *,
 	 row_number() over (partition by emp_no order by from_date desc) as row_num
-	 from number_of_titles_retiring) as num_t_ri_from
+	 from number_of_titles_retiring) as last_from_date
 
-where num_t_ri.row_num = 1
-group by num_t_ri.title;
+where last_from_date.row_num = 1
+group by last_from_date.title;
 
------------------------------------------------------------------
---QUERY 3
 --list of employees who are ready for a mentor
 select 	e.emp_no,
 		e.first_name,
@@ -327,10 +321,7 @@ and (last_date.to_date = '9999-01-01')
 
 order by e.emp_no asc;
 
-
-
-
--- Creating tables for PH-EmployeeDB
+-- Create tables for PH-EmployeeDB
 CREATE TABLE departments (
      dept_no VARCHAR(4) NOT NULL,
      dept_name VARCHAR(40) NOT NULL,
